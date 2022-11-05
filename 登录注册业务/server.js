@@ -3,6 +3,7 @@ const db = require('./db/db')
 const usersModel = require('./model/user')
 const loginRouter = require('./Router/loginRouter')
 const registerRouter = require('./Router/registerRouter')
+const isHaveToken = require('./util/isHaveToken')
 const cors = require('cors')
 const app = express()
 app.use(cors())
@@ -12,6 +13,7 @@ db(function (err) {
     else {
         app.use(loginRouter())
         app.use(registerRouter())
+        app.use(isHaveToken())
         app.listen(3000,(err) => {
             if(!err) console.log('服务器启动成功')
             else console.log('启动失败')
