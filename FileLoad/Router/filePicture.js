@@ -11,15 +11,15 @@ var storage = multer.diskStorage({
     cb(null, url);//创建uploads文件夹
   },
   filename: function (req, file, cb) {
+    file.originalname = Buffer.from(file.originalname, "latin1").toString("utf8"); //解决中文名字乱码问题
     cb(null, file.originalname.split('.')[0] + '.jpg'); //配置文件后缀
   }
 })
 const upload = multer({ storage: storage })
-router.post('/picture', upload.single('file'), (req, res) => {
+// router.post('/picture', upload.array('file') 接受一个以fieldname命名的文件数组。这个文件的信息保存在req.files。
+router.post('/picture', upload.single('file'), (req, res) => { //若传递多个图片，则一个一个图片进行处理
   console.log(req.file, '我是file')
-  console.log(req.body, '我是body')
   const { user } = req.body
-  console.log(user)
   const newFile = { src: `http://localhost:3000/uploads/${req.file.filename}`, img_id: uuidv4() }  //设置一个对象，对象里有图片的地址和id
   userModel.updateMany({ account: user }, { $addToSet: { file: newFile } }, (err, data) => { //$addToSet向数组里面添加一个元素，元素是一个对象，对象里有图片地址和id
     if (err) {
