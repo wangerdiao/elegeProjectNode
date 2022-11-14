@@ -17,7 +17,6 @@ db(function (err) {
         app.use(express.static(path.join(__dirname+'/public'))) //暴露静态资源，使得其他用户可以访问
         // app.use(express.static(__dirname+'/public')) 
         // app.use(express.static('/public')) 
-        console.log(__dirname+'/public')
         app.use(express.static('upload')) 
         app.use(loginRouter())
         app.use(registerRouter())

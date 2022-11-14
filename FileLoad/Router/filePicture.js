@@ -18,7 +18,6 @@ var storage = multer.diskStorage({
 const upload = multer({ storage: storage })
 // router.post('/picture', upload.array('file') 接受一个以fieldname命名的文件数组。这个文件的信息保存在req.files。
 router.post('/picture', upload.single('file'), (req, res) => { //若传递多个图片，则一个一个图片进行处理
-  console.log(req.file, '我是file')
   const { user } = req.body
   const newFile = { src: `http://localhost:3000/uploads/${req.file.filename}`, img_id: uuidv4() }  //设置一个对象，对象里有图片的地址和id
   userModel.updateMany({ account: user }, { $addToSet: { file: newFile } }, (err, data) => { //$addToSet向数组里面添加一个元素，元素是一个对象，对象里有图片地址和id
