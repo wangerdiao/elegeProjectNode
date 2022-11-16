@@ -2,16 +2,33 @@
 const { Router } = require('express')
 const router = new Router()
 const userModel = require('../model/user')
-let path = require('path')
 router.post('/deletePicture',(req,res) => {
-    console.log(req.query)
     const {id,user} = req.query
-    userModel.updateOne({account:user},{$pull:{file:{img_id:id}}},function(err,data){ //删除数据库图片地址
+    userModel.findOne({account:user},function(err,data){ //先查找对应的数据
             if(err)  console.log(err)
             else {
-                console.log(data)
-                // userModel.updateMany({account:user},{$addToSet:{delete_file:deleteFile}})
-                res.json({code:200})
+                const file = data.file
+                const newSrc =file.filter(item => {
+                    if(item.img_id == id) {
+                        return true //返回符合用户删除对应id的数据(单独一个数据)
+                    }
+                });
+                const deleteImg = newSrc[0] //返回一个对象，对象里有src,img_id
+                userModel.updateOne({account:user},{$pull:{file:{img_id:id}}},(err,data) => { //后删除数据库一个图片地址
+                    if(err) {
+                        console.log(err)
+                        res.json({code:'500'})
+                    }else {
+                    userModel.updateMany({account:user},{$addToSet:{delete_file:deleteImg}},(err,data) => { //把删除的数据添加到delete_file里面
+                        if(err) {
+                            console.log(err)
+                            res.json({code:'500'})
+                        }else {
+                            res.json({code:'200'})
+                        }
+                    })
+                    }
+                })
             }
     })
 })

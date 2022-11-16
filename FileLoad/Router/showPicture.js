@@ -2,8 +2,6 @@
 const { Router } = require('express')
 const router = new Router()
 const userModel = require('../model/user')
-let fs = require('fs')
-const path = require('path')
 router.get('/picture/showPicture', (req, res) => {
     const { user,page } = req.query  //获取前端传来得用户名称
     userModel.find({ account: user }, (err, data) => { //查询该用户所上传的图片
