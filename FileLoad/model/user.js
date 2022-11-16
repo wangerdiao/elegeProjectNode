@@ -22,6 +22,9 @@ let mongoose = require('mongoose')
         },
         file:{ //用户上传的文件
             type:[Object]
+        },
+        delete_file:{ //用户删除的文件
+            type:[Object]
         }
     })
     //1.3创建模型对象
