@@ -25,6 +25,9 @@ let mongoose = require('mongoose')
         },
         delete_file:{ //用户删除的文件
             type:[Object]
+        },
+        love_img:{ //用户收藏得图片
+            type:[Object]
         }
     })
     //1.3创建模型对象
