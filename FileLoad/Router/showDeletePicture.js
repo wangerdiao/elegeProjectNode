@@ -8,6 +8,12 @@ router.get('/recycle',(req,res) => {
         if (err) console.log(err)
         else {
             let img = data[0].delete_file  //是一个数组，数组里的每一个对象包含图片地址和id
+             //数组对象的去重
+             const obj = {}
+             img=img.reduce((preValue,nextValue) => {
+                 obj[nextValue.src] ? '':obj[nextValue.src]=true && preValue.push(nextValue)
+                 return preValue
+             },[])
              //------分页器部分
              let total = 0
              img.forEach(item => total += 1); //计算用户存储图片得总量
